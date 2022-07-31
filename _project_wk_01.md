@@ -5,16 +5,25 @@
 #### First, they want the basics of the business:
 
 1. How many courses have we run so far? (This is the number of rows in the table as all courses in the table have been run as you are in 2024).
-    - **999 course runs have happened so far**
 
 ```sql
 -- count ALL rows in table
 select count(*) from courses
 ```
 
+    - **999 course runs have happened so far**
+
+
 #### Now, they would like to know the next level of detail:
 
 2. What are the distinct categories of courses that we run? This is to understand the spectrum of courses we cover.
+
+```sql
+-- retrieve distinct course categories
+select distinct course_category 
+from courses 
+order by course_category
+```
 
     1. Data Engineering
     2. Data Science
@@ -24,12 +33,6 @@ select count(*) from courses
     6. Python
     7. Search
 
-```sql
--- retrieve distinct course categories
-select distinct course_category 
-from courses 
-order by course_category
-```
 
 
 
