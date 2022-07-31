@@ -14,7 +14,8 @@ select count(*) from courses
 
 #### Now, they would like to know the next level of detail:
 
-What are the distinct categories of courses that we run? This is to understand the spectrum of courses we cover.
+2. What are the distinct categories of courses that we run? This is to understand the spectrum of courses we cover.
+
     1. Data Engineering
     2. Data Science
     3. Deep Learning
@@ -32,9 +33,11 @@ order by course_category
 
 
 
-Digging into Machine Learning courses:
+#### Digging into Machine Learning courses:
 
-They have heard from their boss that Machine Learning is a very important category for the co:rise business. Their logical next question: For the course category 'Machine Learning' how many courses have we run so far?
+They have heard from their boss that Machine Learning is a very important category for the co:rise business. Their logical next question: 
+
+3. For the course category 'Machine Learning' how many courses have we run so far?
 
 They want to dig in more. For the course category 'Machine Learning', what are the distinct names and descriptions of the courses?
 
