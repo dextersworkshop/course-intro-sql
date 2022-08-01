@@ -175,7 +175,69 @@ order by start_date
 
 You have been asked to come up with three different lines of questions you could ask about this data that may be useful for understanding the business deeply. Can you formulate three English queries that can be solved with the material we have covered so far in the course? Please also write the corresponding SQL queries.
 
+**Some Ideas for Further Exploration:**
 
-Ideas
+1. Was there a drop in Net Promoter Score for ML courses during 2020?
+    - here we could also do a deeper dive and compare trends between 2019, 2020, 2021
+    - we could also definitely look at how the **NPS from course runs from #8 (covid impacts)** compare to other NPS scores.
 
-- compare NPS for those that may have had COVID impacts?
+```sql
+-- prep data to explore NPS trends by Course Name, by Course Category, by Time
+select 
+    course_name
+  , course_category
+  , extract(year from start_date)  as course_run_year
+  , to_char(start_date, 'fmMonth') as course_run_month
+  , nps
+from courses
+where extract(year from start_date) in (2019, 2020, 2021)
+order by course_name, start_date
+```
+
+
+2. What were the **Top 5** ML course runs in 2023?
+    - this info could inform our course plans for 2024 and also help us consider our price points e.g., is the value so great that we could increase the cost?
+    - could also inform deeper dive analyses to help identify the drivers of strong course performance e.g., did all course runs from these courses have strong NPS or was something interesting happening during these runs?
+
+```sql
+-- top 5 performing course run in 2020
+select  
+    course_id
+  , course_name
+  , course_desc
+  , start_date
+  , extract(year from start_date)  as course_run_start_year
+  , to_char(start_date, 'fmMonth') as course_run_start_month
+  , nps
+from courses
+where 
+  lower(course_category) = 'machine learning'
+  and extract(year from start_date) = 2023
+order by nps desc
+limit 5
+```
+
+
+2. What were the **Bottom 5** ML course runs in 2023?
+    - we could use this info to help inform course plans/improvements/etc. for 2024 
+    - could inform deeper dive analyses to identify what might be driving low performing courses
+
+```sql
+-- bottom 5 performing course run in 2020
+select  
+    course_id
+  , course_name
+  , course_desc
+  , start_date
+  , extract(year from start_date)  as course_run_start_year
+  , to_char(start_date, 'fmMonth') as course_run_start_month
+  , nps
+from courses
+where 
+  lower(course_category) = 'machine learning'
+  and extract(year from start_date) = 2023
+order by nps asc
+limit 5
+```
+
+
