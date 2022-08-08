@@ -187,7 +187,8 @@ select
   -- taking avg course level by taking the average of averages (bad!)
   , round(avg(avg(nps)) over(partition by course_level),1 ) as avg_avg_nps_by_level
 
-  -- taking a proper average from the original dataset
+  -- taking a proper avg by first summing nps and counting rows from the original dataset 
+  -- then applying window functions to that output
   , round( sum(sum(nps)) over(partition by course_level) / 
            sum(count(nps))  over(partition by course_level), 1)  as avg_nps_by_level
 
