@@ -1,4 +1,4 @@
-## HW | Project Week 01
+## HW | Project Week 02
 
 
 ## Part 1:
