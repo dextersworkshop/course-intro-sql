@@ -189,7 +189,7 @@ select
 
   -- taking a proper avg by first summing nps and counting rows from the original dataset 
   -- then applying window functions to that output
-  , round( sum(sum(nps)) over(partition by course_level) / 
+  , round( sum(sum(nps))    over(partition by course_level) / 
            sum(count(nps))  over(partition by course_level), 1)  as avg_nps_by_level
 
 from courses
@@ -210,8 +210,24 @@ order by course_level, course_duration desc;
 
 We will now go back to our offline retail store, the xacts table. 
 
-**HAVEN'T GOTTEN TO THIS YET**
 
-We now want to understand how different user_demographics spend on different product_categories. Write a SQL query to print the total sales for each user_demographic and product_category combination. Then, assign a rank to each output row based on the rank of the row within each product_category - the rank is with respect to the total sales.
+1. We now want to understand how different user_demographics spend on different product_categories. Write a SQL query to print the total sales for each user_demographic and product_category combination. Then, assign a rank to each output row based on the rank of the row within each product_category - the rank is with respect to the total sales.
 
-We want to understand how long it takes for a user to come back to the store. Write a SQL query to print the user_id, purchase_date and the gap between this purchase and the previous purchase.
+```sql
+-- total sales by User Demographic, by Product Category (ranked by sales within product category)
+select
+  user_demographic
+  , product_category
+  , sum(sale_price) as total_sales
+  , rank() over(partition by product_category order by sum(sale_price) desc) as testing
+from xacts
+group by 1, 2
+order by product_category, total_sales desc
+```
+
+
+2. We want to understand how long it takes for a user to come back to the store. Write a SQL query to print the user_id, purchase_date and the gap between this purchase and the previous purchase.
+
+```sql
+
+```
