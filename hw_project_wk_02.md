@@ -171,11 +171,37 @@ order by course_duration desc, course_level asc;
 
 **Bonus:** Let's also look at the averages for a course level for each output row to see how the averages for a course level compare with individual rows (the combination of course_level and course_duration).
 
+6. Do you see that advanced courses have a significantly lower nps level when they are of a smaller duration? And does this pattern switch for basic courses? **Yes, i see it and the pattern does switch for basic courses**
+
 ```sql
- -- didn't quite follow the BONUS instructions
+-- summary stats by Class Duration, by Course Level (for NPS)
+select 
+    course_level
+  , case 
+        when num_weeks <  4 then 'short'
+        when num_weeks >= 4 then 'long'
+        else null
+    end as course_duration
+  , round(avg(nps),1)             as avg_nps_by_level_by_duration
+
+  -- taking avg course level by taking the average of averages (bad!)
+  , round(avg(avg(nps)) over(partition by course_level),1 ) as avg_avg_nps_by_level
+
+  -- taking a proper average from the original dataset
+  , round( sum(sum(nps)) over(partition by course_level) / 
+           sum(count(nps))  over(partition by course_level), 1)  as avg_nps_by_level
+
+from courses
+group by
+    case 
+        when num_weeks <  4 then 'short'
+        when num_weeks >= 4 then 'long'
+        else null
+    end
+    , course_level
+order by course_level, course_duration desc;
 ```
 
-Do you see that advanced courses have a significantly lower nps level when they are of a smaller duration? And does this pattern switch for basic courses? **Yes, i see it and the pattern does switch for basic courses**
 
 <br>
 
