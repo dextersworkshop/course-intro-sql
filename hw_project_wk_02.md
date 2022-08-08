@@ -149,50 +149,42 @@ You decide to investigate this a bit more in the data.
 5. Let us designate courses that are less than 4 weeks old to be short, and long otherwise and call this course_duration. Let us get the average nps for each course_level and course_duration combination.  You can look at all the rows in the courses table and not worry about excluding scaled courses, scaled categories or the aberration year 2020. 
 
 ```sql
--- summary stats by Class Duration for NPS
+-- summary stats by Class Duration, by Course Level (for NPS)
 select 
     case 
-        when num_weeks <= 4 then 'short'
-        when num_weeks >  4 then 'long'
+        when num_weeks <  4 then 'short'
+        when num_weeks >= 4 then 'long'
         else null
     end as course_duration
-  , min(nps)                      as min_nps
+  , course_level
   , round(avg(nps),1)             as avg_nps
-  , max(nps)                      as max_nps
-  , round(stddev(nps),1)          as sd_nps
-  , count(course_name)
 from courses
 group by
     case 
-        when num_weeks <= 4 then 'short'
-        when num_weeks >  4 then 'long'
+        when num_weeks <  4 then 'short'
+        when num_weeks >= 4 then 'long'
         else null
-    end;
+    end
+    , course_level
+order by course_duration desc, course_level asc;
 ```
 
 **Bonus:** Let's also look at the averages for a course level for each output row to see how the averages for a course level compare with individual rows (the combination of course_level and course_duration).
 
 ```sql
--- summary stats by Class Duration, by Course Level (for NPS)
-select 
-   case 
-        when num_weeks <= 4 then 'short'
-        when num_weeks >  4 then 'long'
-        else null
-    end as course_duration
-  , course_level
-  , min(nps)                      as min_nps
-  , round(avg(nps),1)             as avg_nps
-  , max(nps)                      as max_nps
-  , round(stddev(nps),1)          as sd_nps
-  , count(course_name)
-from courses
-group by
-    case 
-        when num_weeks <= 4 then 'short'
-        when num_weeks >  4 then 'long'
-        else null
-    end
-    , course_level
-order by course_duration desc;
+ -- didn't quite follow the BONUS instructions
 ```
+
+Do you see that advanced courses have a significantly lower nps level when they are of a smaller duration? And does this pattern switch for basic courses? **Yes, i see it and the pattern does switch for basic courses**
+
+<br>
+
+## Part 2: (Bonus)
+
+We will now go back to our offline retail store, the xacts table. 
+
+**HAVEN'T GOTTEN TO THIS YET**
+
+We now want to understand how different user_demographics spend on different product_categories. Write a SQL query to print the total sales for each user_demographic and product_category combination. Then, assign a rank to each output row based on the rank of the row within each product_category - the rank is with respect to the total sales.
+
+We want to understand how long it takes for a user to come back to the store. Write a SQL query to print the user_id, purchase_date and the gap between this purchase and the previous purchase.
