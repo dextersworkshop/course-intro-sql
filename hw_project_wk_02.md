@@ -219,7 +219,7 @@ select
   user_demographic
   , product_category
   , sum(sale_price) as total_sales
-  , rank() over(partition by product_category order by sum(sale_price) desc) as ranked_sales_with_category
+  , rank() over(partition by product_category order by sum(sale_price) desc) as ranked_sales_within_category
 from xacts
 group by 1, 2
 order by product_category, total_sales desc
