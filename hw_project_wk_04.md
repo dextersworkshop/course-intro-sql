@@ -51,6 +51,7 @@ left join learners on reg_info.learner_id = learners.learner_id;
 <br>
 
 3. Retrieve instructor_id and names of each instructor in corise and the  number of  courses they have taught
+    - **used LEFT JOIN to ensure that instructors that haven't taught yet are included in the output. And, used count(col-name) to avoid counts of 1 where rows were null in the right table; my approach returns counts of 0 when NULL (another way that would be even clearer would be to use a Case When statement)**
 
 ```sql
 -- count of courses run by CoRise instructors
