@@ -108,21 +108,20 @@ select distinct affiliation from learners
     except
 
 -- list of affiliations having courses taught in 2020 or having students enrolled in 2020
-select * from (
 
-    -- affiliations teaching courses in 2020
-    select distinct instructors.affiliation from instructors
-    inner join course_run on instructors.instructor_id = course_run.instructor_id
-    where extract(year from start_date) = 2020
+-- affiliations teaching courses in 2020
+(
+select distinct instructors.affiliation from instructors
+inner join course_run on instructors.instructor_id = course_run.instructor_id
+where extract(year from start_date) = 2020
 
-        -- combine teacher affiliations w/student affiliations
-        union distinct
+    -- combine teacher affiliations w/student affiliations
+    union distinct
 
-    -- affiliations with students enrolled in courses in 2020
-    select distinct affiliation from learners
-    inner join course_registration_info on learners.learner_id = course_registration_info.learner_id
-    inner join course_run on course_registration_info.course_run_id = course_run.course_run_id
-    where extract(year from start_date) = 2020
-    
-) as affiliations_2020
+-- affiliations with students enrolled in courses in 2020
+select distinct affiliation from learners
+inner join course_registration_info on learners.learner_id = course_registration_info.learner_id
+inner join course_run on course_registration_info.course_run_id = course_run.course_run_id
+where extract(year from start_date) = 2020
+)
 ```
