@@ -66,3 +66,31 @@ group by
     instructors.name
 order by instructor_id;
 ```
+
+4. Affiliations for which neither an instructor has taught a course in 2020 nor a student has registered for a course in 2020 (please do not use outer joins for this query)
+    - **I am getting just ONE affiliation returned that meets these conditions:**
+        * *Mail-Well Inc.*
+
+```sql
+-- affiliations without instructors running courses in 2020
+select
+    affiliation
+from instructors 
+inner join course_run on instructors.instructor_id = course_run.instructor_id
+group by affiliation
+having max(case when extract(year from start_date) = 2020 then 1 else 0 end) = 0
+
+-- identify affiliations meeting both conditions by finding where they intersect eachother
+intersect
+
+-- affiliations without students taking courses in 2020
+select
+    learners.affiliation
+from learners
+inner join course_registration_info as reg_info 
+    on learners.learner_id = reg_info.learner_id
+inner join course_run 
+    on reg_info.course_run_id = course_run.course_run_id
+group by learners.affiliation
+having max(case when extract(year from start_date) = 2020 then 1 else 0 end) = 0;
+```
