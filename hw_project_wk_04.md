@@ -97,12 +97,14 @@ having max(case when extract(year from start_date) = 2020 then 1 else 0 end) = 0
 
 ```sql
 -- list of ALL affiliations (full universe of possibilities)
+(
 select distinct affiliation from instructors
 
     -- combine ALL instructor affiliations w/ALL student affiliations
     union distinct
 
 select distinct affiliation from learners
+)
 
     -- subtract 2020 affiliation participants from FULL list of affiliations
     except
@@ -124,4 +126,33 @@ inner join course_registration_info on learners.learner_id = course_registration
 inner join course_run on course_registration_info.course_run_id = course_run.course_run_id
 where extract(year from start_date) = 2020
 )
+```
+
+
+5. Average teaching experience of instructors who have never taught a class of more than 4 weeks
+
+### Solution 01
+    
+- **Average Teaching Experience:** 4.3 Years
+
+```sql
+-- avg teaching experience for instructors who have never taught a class of more than 4 weeks long
+select 
+    round(avg(teaching_experience), 1) as avg_teaching_experience
+from instructors
+inner join (
+
+    -- get distinct list of ALL instructors (A)
+    select distinct instructor_id from instructors
+
+        -- remove from A what is in B
+        except
+
+    -- get list of instructors having taught course more than 4 weeks long
+    select distinct instructor_id from course_run
+    where num_weeks > 4
+    order by instructor_id
+) as short_class_instructors
+
+on instructors.instructor_id = short_class_instructors.instructor_id;
 ```
