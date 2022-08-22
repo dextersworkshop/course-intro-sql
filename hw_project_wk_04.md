@@ -148,7 +148,7 @@ inner join (
         -- remove from A what is in B
         except
 
-    -- get list of instructors having taught course more than 4 weeks long
+    -- get list of instructors (B) having taught course more than 4 weeks long
     select distinct instructor_id from course_run
     where num_weeks > 4
     order by instructor_id
